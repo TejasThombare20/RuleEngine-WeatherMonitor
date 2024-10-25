@@ -57,6 +57,19 @@ func (c *RuleController) GetRule(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"rule": rule, "message": "rule fetch succefully", "success": true})
 }
 
+func (c *RuleController) GetRules(ctx *gin.Context) {
+
+	rules, err := c.service.GetRules()
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to fetch rules"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"rules": rules, "message": "Rules fetched successfully", "success": true})
+
+}
+
 func (c *RuleController) CombineRules(ctx *gin.Context) {
 	var input struct {
 		Name        string   `json:"name" binding:"required"`
@@ -80,12 +93,12 @@ func (c *RuleController) CombineRules(ctx *gin.Context) {
 		ruleIDs[i] = id
 	}
 
-	combinedRule, err := c.service.CombineRules(input.Name, input.Description, ruleIDs)
+	err := c.service.CombinedRules(input.Name, input.Description, ruleIDs)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to combine rules"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to combine rules", "error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, combinedRule)
+	ctx.JSON(http.StatusCreated, gin.H{"message": "rules combined successfully", "success": true})
 }

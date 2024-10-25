@@ -20,6 +20,8 @@ import {
   NodeProps,
   Handle,
   Position,
+  Background,
+  BackgroundVariant,
 } from "@xyflow/react";
 
 // you also need to adjust the style import
@@ -35,9 +37,15 @@ interface ASTNode {
   right?: ASTNode;
 }
 
-const CustomNode: React.FC<NodePropss> = ({ data }) => {
+type CustomNodeprops = {
+  data: {
+    label: string;
+  };
+};
+
+const CustomNode = ({ data }: CustomNodeprops) => {
   return (
-    <div className="px-4 py-2 shadow-md rounded-md bg-white border-2 border-gray-200">
+    <div className="px-2 py-1 shadow-md rounded-md bg-white border-1 border-gray-200 dark:text-gray-800" >
       <Handle
         type="target"
         position={Position.Top}
@@ -120,7 +128,7 @@ const ASTtree = ({ ast }: PorpsType) => {
         });
       }
 
-      const horizontalSpacing = 200 / (level + 1);
+      const horizontalSpacing = 800 / (level +1);
       const verticalSpacing = 100;
 
       if (node.left) {
@@ -154,8 +162,10 @@ const ASTtree = ({ ast }: PorpsType) => {
   }, [ast]);
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    // <div style={{ width: "100vw", height: "100vh" }}>
+    <div className="w-full h-[680px]">
       <ReactFlow
+      className="w-full h-full"
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -166,6 +176,7 @@ const ASTtree = ({ ast }: PorpsType) => {
         fitView
       >
         <Controls />
+        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         <MiniMap />
       </ReactFlow>
     </div>

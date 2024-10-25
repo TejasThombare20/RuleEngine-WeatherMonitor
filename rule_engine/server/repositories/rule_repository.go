@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/TejasThombare20/rule-engine/config"
 	"github.com/TejasThombare20/rule-engine/models"
@@ -48,4 +49,39 @@ func (r *RuleRepository) FindByIDs(ids []primitive.ObjectID) ([]*models.Rule, er
 		return nil, err
 	}
 	return rules, nil
+}
+
+func (r *RuleRepository) Find() ([]*models.Rule, error) {
+
+	var rules []*models.Rule
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// cursor, err := collection.Find(ctx, bson.M{})
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	cursor, err := r.collection.Find(ctx, bson.M{})
+
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var rule models.Rule
+		if err := cursor.Decode(&rule); err != nil {
+			return nil, err
+		}
+		rules = append(rules, &rule)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return rules, nil
+
 }

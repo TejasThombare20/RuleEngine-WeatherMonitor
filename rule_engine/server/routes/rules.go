@@ -16,5 +16,7 @@ func RuleRoutes(Routes *gin.Engine) {
 	Routes.POST("/rules", ruleController.CreateRule)
 	Routes.GET("/rules/:id", ruleController.GetRule)
 	Routes.POST("/rules/combine", ruleController.CombineRules)
+	Routes.GET("/rules", ruleController.GetRules)
+	Routes.POST("/evaluate", ruleController.EvaluateRule)
 
 }
