@@ -20,7 +20,7 @@ func DBSetup() *mongo.Client {
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -30,7 +30,7 @@ func DBSetup() *mongo.Client {
 	err = client.Ping(context.TODO(), nil)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return nil
 	}
 

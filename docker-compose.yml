@@ -1,0 +1,41 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # Rule Engine Services
+  rule-engine-frontend:
+    build:
+      context: ./rule_engine/client
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+
+  rule-engine-backend:
+    build:
+      context: ./rule_engine/server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+
+  # Weather Monitoring Services
+  weather-frontend:
+    build:
+      context: ./weather_monitoring/client
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:9000
+
+  weather-backend:
+    build:
+      context: ./weather_monitoring/server
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+
+
+
+
