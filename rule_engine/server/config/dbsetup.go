@@ -43,11 +43,3 @@ func DBSetup() *mongo.Client {
 var Client *mongo.Client = DBSetup()
 
 var RuleCollection = Client.Database("zeotap").Collection("rules")
-
-// func getCollection(client *mongo.Collection, collectionName string) *mongo.Collection {
-
-// 	var collection *mongo.Collection = client.Database("zeotap").Collection(collectionName)
-
-// 	return collection
-
-// }
