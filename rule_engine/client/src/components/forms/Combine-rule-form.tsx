@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -12,23 +12,12 @@ import {
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../ui/command";
-import { cn } from "@/lib/utils";
 import apiHandler from "@/handlers/api-handler";
-import { rule } from "postcss";
 import { MultiSelect } from "../MultiSelect";
 import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
+import { DialogContext } from "../Model";
 
 type Props = {};
 
@@ -44,7 +33,7 @@ const FormSchema = z.object({
 
 const CombineRuleForm = (props: Props) => {
   const router = useRouter();
-
+  const { setOpen } = useContext(DialogContext);
   const [rules, setRules] = useState<any>([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -66,8 +55,10 @@ const CombineRuleForm = (props: Props) => {
       try {
         const rulesData = await apiHandler.get<any>("/rules");
         setRules(rulesData.rules);
+        setOpen(false);
       } catch (error) {
         console.error(error);
+        setOpen(false);
       }
     };
 

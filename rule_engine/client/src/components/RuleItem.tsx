@@ -12,7 +12,7 @@ type Props = {
 
 const RuleItem = ({ rule }: Props) => {
   return (
-    <Card className="relative py-2 w-[400px] h-[250px] rounded-md border border-gray-100/50 backdrop-blur-sm shadow-sm shadow-gray-100/25 ">
+    <Card className="relative py-2 w-[400px]  h-[250px] rounded-md border border-gray-800  dark:border-gray-100/50  backdrop-blur-sm shadow-sm shadow-gray-500/25 dark:shadow-gray-100/25 ">
       <CardContent className="flex flex-col justify-start items-start h-full">
         <p className="text-base">
           <span>Rule name: </span>

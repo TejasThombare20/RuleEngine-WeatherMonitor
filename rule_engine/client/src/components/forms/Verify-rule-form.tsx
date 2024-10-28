@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Form,
   FormControl,
@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "../ui/textarea";
 import apiHandler from "@/handlers/api-handler";
+import { DialogContext } from "../Model";
 
 type Props = { rule_id: string };
 
@@ -33,6 +34,7 @@ const Verifyruleform = ({ rule_id }: Props) => {
   const [validationResult, setValidationResult] = useState<boolean | null>(
     null
   );
+  const { setOpen } = useContext(DialogContext);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,9 +45,7 @@ const Verifyruleform = ({ rule_id }: Props) => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log("values", values);
       const parsedJson = JSON.parse(values.jsonInput);
-      console.log("parsedJson", parsedJson);
 
       const requestData = {
         rule_id,
@@ -60,12 +60,14 @@ const Verifyruleform = ({ rule_id }: Props) => {
       const isPassed = RuleVerifyData?.result?.result;
 
       setValidationResult(isPassed);
+      setOpen(false);
       //   toast({
       //     title: "Validation Successful",
       //     description: "The input is valid JSON.",
       //   });
     } catch (error) {
       setValidationResult(false);
+      setOpen(false);
       //   toast({
       //     title: "Validation Failed",
       //     description: "The input is not valid JSON.",

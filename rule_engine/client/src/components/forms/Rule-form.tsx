@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import {
   Form,
   FormControl,
@@ -15,8 +15,11 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ApiHandler from "@/handlers/api-handler";
+import { DialogContext } from "../Model";
 
 const RuleForm = () => {
+  const { setOpen } = useContext(DialogContext);
+
   const formSchema = z.object({
     name: z.string().min(2, {
       message: "Username must be at least 2 characters.",
@@ -38,8 +41,10 @@ const RuleForm = () => {
     try {
       const ruleData = await ApiHandler.post<any>("/rules", values);
       console.log("ruleData", ruleData);
+      setOpen(false);
     } catch (error) {
       console.log(error);
+      setOpen(false);
     }
   }
 
