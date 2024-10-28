@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useState } from "react";
 import {
   Dialog,
@@ -16,7 +17,6 @@ interface DialogContextType {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Create the context with the correct type
 export const DialogContext = createContext<DialogContextType>({
   setOpen: () => {},
 });
@@ -26,8 +26,8 @@ const Tempthreshold = (props: Props) => {
   return (
     <DialogContext.Provider value={{ setOpen }}>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger>
-          <Button variant={"outline"}>Set Threashold</Button>
+        <DialogTrigger className="w-[100px] border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground py-1 rounded-md ">
+          <span className="text-sm ">Set threshold</span>
         </DialogTrigger>
         <DialogContent className="w-[1000px]">
           <DialogHeader className="w-full">

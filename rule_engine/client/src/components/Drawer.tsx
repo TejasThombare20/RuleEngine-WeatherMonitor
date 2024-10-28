@@ -29,12 +29,7 @@ const DrawerHandler = ({ isOpen, title }: Props) => {
         </DrawerHeader>
         <DrawerFooter>
           <Button>Submit</Button>
-          <DrawerClose
-            asChild
-            onClick={() => {
-              console.log("Hello");
-            }}
-          >
+          <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>

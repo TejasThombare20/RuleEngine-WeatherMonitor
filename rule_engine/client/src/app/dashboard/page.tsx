@@ -25,36 +25,6 @@ import React, { useEffect, useState } from "react";
 const page = () => {
   const [rules, setRules] = useState([]);
 
-  const sampleAST = {
-    type: "operator",
-    value: "AND",
-    left: {
-      type: "condition",
-      value: ">",
-      left: { type: "leaf", value: "age" },
-      right: { type: "leaf", value: "30" },
-    },
-    right: {
-      type: "condition",
-      value: "=",
-      left: { type: "leaf", value: "department" },
-      right: { type: "leaf", value: "Sales" },
-    },
-  };
-
-  let astData: any;
-
-  // try {
-  //   const ruleData = await apiHandler.get<any>(
-  //     "/rules/671612f59437c7fa60122e2b"
-  //   );
-
-  //   astData = ruleData?.rule?.root_node;
-  //   console.log(ruleData);
-
-  //   console.log(astData);
-  // } catch (error) {}
-
   useEffect(() => {
     const fetchRules = async () => {
       try {
@@ -73,19 +43,6 @@ const page = () => {
       <section className="w-full flex justify-between items-center ">
         <h1 className="text-5xl font-extrabold text- ">Dashboard</h1>
         <aside className="flex justify-center items-center gap-8">
-          {/* <DrawerHandler isOpen={openDrawer}  title={"Create Rule"} />
-           */}
-
-          {/* <Button
-            className=" flex justify-center items-center gap-2 px-4 py-2 "
-            onClick={() => setopenDrawer(true)}
-          >
-            <CirclePlusIcon />
-            Add Rule
-          </Button>
-
-          <DrawerHandler title="Are you sure?" isOpen={openDrawer} /> */}
-
           <Drawer modal={false}>
             <DrawerTrigger asChild>
               <Button className=" flex justify-center items-center gap-2 px-4 py-2 ">
@@ -129,7 +86,6 @@ const page = () => {
       {rules && rules.length > 0 && (
         <div className="w-full flex flex-col justify-start items-start gap-4 ">
           <div className="text-3xl font-bold ">Rules :</div>
-          {/* <section className="grid grid-cols-4 gap-4 w-full  rounded-md border border-gray-100/50 backdrop-blur-md  shadow-sm shadow-gray-100/25 p-4 "> */}
           <section className="grid grid-cols-3 gap-4 w-full p-4 ">
             {rules.map((rule, index) => (
               <RuleItem key={index} rule={rule} />
@@ -137,9 +93,6 @@ const page = () => {
           </section>
         </div>
       )}
-      {/* <RuleForm /> */}
-
-      {/* <ASTtree ast={astData} /> */}
     </main>
   );
 };

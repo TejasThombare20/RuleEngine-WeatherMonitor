@@ -15,13 +15,7 @@ const page = (props: Props) => {
       <section className="w-full flex justify-between items-center ">
         <div className="w-full flex flex-col justify-start items-start gap-4">
           <h2 className="text-5xl font-bold">Dashboard</h2>
-          {/* <p className="font-semibold text-gray-400 max-w-4xl ">
-            This is Temperature data for All Cities{" "}
-            <span>
-              for more information regarding feeling temperature,dominant
-              condition please select Individual city{" "}
-            </span>
-          </p> */}
+
         </div>
         <aside className="flex justify-center items-center gap-4">
            <Tempthreshold/>

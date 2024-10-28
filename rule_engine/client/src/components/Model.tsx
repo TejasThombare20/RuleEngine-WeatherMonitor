@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useState } from "react";
 import {
   Dialog,
@@ -10,7 +11,6 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Network } from "lucide-react";
 import clsx from "clsx";
 
 type Props = {

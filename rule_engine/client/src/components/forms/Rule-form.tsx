@@ -16,9 +16,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ApiHandler from "@/handlers/api-handler";
 import { DialogContext } from "../Model";
+import { Textarea } from "../ui/textarea";
+import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const RuleForm = () => {
   const { setOpen } = useContext(DialogContext);
+  const router = useRouter();
 
   const formSchema = z.object({
     name: z.string().min(2, {
@@ -42,6 +46,12 @@ const RuleForm = () => {
       const ruleData = await ApiHandler.post<any>("/rules", values);
       console.log("ruleData", ruleData);
       setOpen(false);
+ 
+       window.location.reload()
+
+      // setTimeout(() => {
+      //   router.refresh();
+      // }, 0);
     } catch (error) {
       console.log(error);
       setOpen(false);
@@ -49,7 +59,7 @@ const RuleForm = () => {
   }
 
   return (
-    <div>
+    <div className="w-[500px]">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -73,7 +83,7 @@ const RuleForm = () => {
               <FormItem>
                 <FormLabel>Rule String</FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     placeholder="eg : (age > 30 AND department = 'Sales')"
                     {...field}
                   />

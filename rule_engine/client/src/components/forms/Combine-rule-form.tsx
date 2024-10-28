@@ -55,10 +55,8 @@ const CombineRuleForm = (props: Props) => {
       try {
         const rulesData = await apiHandler.get<any>("/rules");
         setRules(rulesData.rules);
-        setOpen(false);
       } catch (error) {
         console.error(error);
-        setOpen(false);
       }
     };
 
@@ -74,8 +72,15 @@ const CombineRuleForm = (props: Props) => {
         data
       );
       console.log("combinedRuledata", combinedRuledata);
+      setOpen(false);
+
+      window.location.reload();
+
       router.refresh();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      setOpen(false);
+    }
   }
 
   return (
