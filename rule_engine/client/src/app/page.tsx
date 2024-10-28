@@ -11,13 +11,13 @@ export default function Home() {
           aria-label="true"
           className="absolute top-0 z-[-2] h-screen w-screen rotate-180 transform bg-white bg-[radial-gradient(60%_120%_at_50%_50%,hsla(0,0%,100%,0)_0,rgba(252,205,238,.5)_100%)]"
         /> */}
-        <div  
+        <div
           aria-label="true"
           className="absolute bottom-0 left-0  right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_64px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] z-[-2]"
         />
         <div className="bg-gradient-to-r from-primary to-secondary-foreground text-transparent bg-clip-text relative">
-          <h1 className=" max-w-7xl text-7xl font-bold text-center sm:text-[100px] ">
-            Manage any content. Anywhere
+          <h1 className=" max-w-5xl text-7xl font-bold text-center sm:text-[100px] ">
+            Create your own Rules
           </h1>
         </div>
         <Link href={"/dashboard"}>

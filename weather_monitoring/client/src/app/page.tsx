@@ -19,7 +19,7 @@ export default function Home() {
         <div className="absolute top-0 z-[-2] h-screen w-screen rotate-180 transform !dark:bg-white  !dark:bg-[radial-gradient(60%_120%_at_50%_50%,hsla(0,0%,100%,0)_0,rgba(252,205,238,.5)_100%)]" />
         <div className="bg-gradient-to-r from-primary to-secondary-foreground text-transparent bg-clip-text relative">
           <h1 className=" max-w-7xl text-7xl font-bold text-center sm:text-[100px] ">
-            Manage any content. Anywhere
+            Moniter the Weather of Metro citites
           </h1>
         </div>
         <Link href={"/dashboard"}>
