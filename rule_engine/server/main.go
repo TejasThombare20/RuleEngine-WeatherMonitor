@@ -6,6 +6,7 @@ import (
 	"github.com/TejasThombare20/rule-engine/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -15,6 +16,11 @@ func main() {
 	router.Use(cors.Default())
 
 	router.Use(gin.Logger())
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
 
 	routes.RuleRoutes(router)
 

@@ -1,6 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-const BASE_URL = "http://localhost:9000";
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://weathermonitor.onrender.com"
+    : "http://localhost:9000";
 
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json",

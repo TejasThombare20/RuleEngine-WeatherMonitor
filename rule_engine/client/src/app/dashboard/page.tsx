@@ -19,19 +19,24 @@ import {
 } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
 import apiHandler from "@/handlers/api-handler";
-import { CirclePlusIcon, Merge } from "lucide-react";
+import { CirclePlusIcon, Loader2, Merge } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
   const [rules, setRules] = useState([]);
+  const [isLoading, setisLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchRules = async () => {
       try {
+        setisLoading(true);
         const rulesData = await apiHandler.get<any>("/rules");
+        console.log("rulesData", rulesData);
         setRules(rulesData.rules);
+        setisLoading(false);
       } catch (error) {
         console.error(error);
+        setisLoading(false);
       }
     };
 
@@ -83,14 +88,24 @@ const page = () => {
         </aside>
       </section>
       <Separator className="w-full" />
-      {rules && rules.length > 0 && (
-        <div className="w-full flex flex-col justify-start items-start gap-4 ">
-          <div className="text-3xl font-bold ">Rules :</div>
-          <section className="grid grid-cols-3 gap-4 w-full p-4 ">
-            {rules.map((rule, index) => (
-              <RuleItem key={index} rule={rule} />
-            ))}
-          </section>
+      {!isLoading ? (
+        rules && rules.length > 0 ? (
+          <div className="w-full flex flex-col justify-start items-start gap-4 ">
+            <div className="text-3xl font-bold ">Rules :</div>
+            <section className="grid grid-cols-3 gap-4 w-full p-4 ">
+              {rules.map((rule, index) => (
+                <RuleItem key={index} rule={rule} />
+              ))}
+            </section>
+          </div>
+        ) : (
+          <div className="w-full flex justify-center items-center">
+            <h2 className="text-4xl font-bold">No Rules data available</h2>
+          </div>
+        )
+      ) : (
+        <div className="w-full  flex justify-center items-center animate-spin ">
+          <Loader2 size={100} />
         </div>
       )}
     </main>

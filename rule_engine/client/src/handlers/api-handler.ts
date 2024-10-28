@@ -1,6 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://ruleengine-weathermonitor.onrender.com"
+    : "http://localhost:8000";
 
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json",
@@ -30,7 +33,7 @@ class ApiHandler {
         method,
         url,
         data,
-        ...config,  
+        ...config,
       });
       return response.data;
     } catch (error) {
@@ -71,6 +74,5 @@ class ApiHandler {
     return this.request<T>("patch", url, data, config);
   }
 }
-
 
 export default new ApiHandler();
