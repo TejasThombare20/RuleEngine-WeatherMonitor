@@ -31,7 +31,7 @@ func main() {
 		log.Println("Failed to connect with database:", err)
 	}
 
-	log.Println("Connected to TimescaleDB database:")
+	log.Println("Connected to TimescaleDB database")
 
 	//Repo innitialization
 
@@ -55,14 +55,14 @@ func main() {
 
 	// Initialize services
 	weatherService := services.NewWeatherService(weatherClient, weatherRepo)
-	// alertService := services.NewAlertService(
-	services.NewAlertService(
+	alertService := services.NewAlertService(
+		// services.NewAlertService(
 		alertRepo,
-		"smtp.gmail.com",
+		"smtp.zoho.com",
 		587,
-		"your-email@gmail.com",
-		"your-app-password",
-		"weather-alerts@yourdomain.com")
+		"tejasthombare@zohomail.in",
+		"7iB5#Vu2vXPGamn",
+		"tejasthombare@zohomail.in")
 
 	userServices := services.NewUserSerivce(userRepo)
 
@@ -70,7 +70,7 @@ func main() {
 	userController := controllers.NewUserController(userServices)
 
 	go weatherService.StartWeatherCollection()
-	// alertService.StartAlertProcessing()
+	alertService.StartAlertProcessing()
 
 	routes.WeathterMonitoringRoutes(router, weatherController, userController)
 

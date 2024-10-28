@@ -27,13 +27,22 @@ func NewAlertService(alertRepo *repositories.AlertRepository, smtpHost string, s
 
 func (s *AlertService) ProcessAlerts() error {
 
+	log.Println("Inside ProcessAlerts func")
+
 	rows, err := s.alertRepo.QyeryBreaches_view()
 
 	if err != nil {
 		log.Println("error getting rows from query breatches view ")
+
+		return err
 	}
 
+	log.Println("rows retrieved", rows)
+
 	for rows.Next() {
+
+		println("Hello from rows")
+
 		var alert struct {
 			ID          int
 			UserID      int
@@ -50,6 +59,8 @@ func (s *AlertService) ProcessAlerts() error {
 			log.Printf("Error scanning alert: %v", err)
 			continue
 		}
+
+		log.Println("alert sending to the email", alert.Email)
 
 		// Send email alert
 		if err := s.sendAlertEmail(alert); err != nil {
@@ -76,6 +87,7 @@ func (s *AlertService) sendAlertEmail(alert struct {
 	Threshold   float64
 	Email       string
 }) error {
+
 	const emailTemplate = `
         <h2>Weather Alert for {{.CityName}}</h2>
         <p>The temperature has exceeded your configured threshold:</p>
@@ -106,8 +118,11 @@ func (s *AlertService) sendAlertEmail(alert struct {
 }
 
 func (s *AlertService) StartAlertProcessing() {
-	ticker := time.NewTicker(5 * time.Minute)
+
+	log.Println("Inside alert process")
+	ticker := time.NewTicker(1 * time.Minute)
 	go func() {
+		log.Println("Inside go func")
 		for range ticker.C {
 			if err := s.ProcessAlerts(); err != nil {
 				log.Printf("Error processing alerts: %v", err)

@@ -135,6 +135,7 @@ func (r *AlertRepository) Create_threshold_view() error {
 
 func (r *AlertRepository) QyeryBreaches_view() (*sql.Rows, error) {
 
+	log.Println("INside query breaches view...")
 	// 	rows, err := r.db.Query(`
 	// 	WITH new_breaches AS (
 	// 		SELECT
@@ -170,7 +171,7 @@ func (r *AlertRepository) QyeryBreaches_view() (*sql.Rows, error) {
 	// 	RETURNING id, user_id, city_name, temperature, threshold, email
 	// `)
 	rows, err := r.db.Query(`
-				WITH consecutive_breaches AS (
+		WITH consecutive_breaches AS (
 				SELECT 
 					bucket,
 					city_name,
@@ -184,7 +185,7 @@ func (r *AlertRepository) QyeryBreaches_view() (*sql.Rows, error) {
 					) as prev_breach_count
 				FROM threshold_breach_counts
 			),
-			breach_status AS (
+		breach_status AS (
 				SELECT 
 					bucket,
 					city_name,
@@ -199,7 +200,7 @@ func (r *AlertRepository) QyeryBreaches_view() (*sql.Rows, error) {
 				FROM consecutive_breaches
 				WHERE breach_count > 0 OR prev_breach_count > 0
 			),
-			new_breaches AS (
+		new_breaches AS (
 				SELECT
 					bs.city_name,
 					bs.user_id,
@@ -207,7 +208,6 @@ func (r *AlertRepository) QyeryBreaches_view() (*sql.Rows, error) {
 					bs.threshold,
 					bs.consecutive_breaches,
 					u.email,
-					u.name,
 					u.temperature_unit
 				FROM breach_status bs
 				JOIN users u ON bs.user_id = u.id
@@ -219,9 +219,10 @@ func (r *AlertRepository) QyeryBreaches_view() (*sql.Rows, error) {
 					SELECT 1 FROM temperature_alerts ta
 					WHERE ta.user_id = bs.user_id
 					AND ta.city_name = bs.city_name
-					AND ta.alert_timestamp > NOW() - INTERVAL '1 hour'
+					AND ta.alert_timestamp > NOW() - INTERVAL '2 minutes'
 				)
-			)
+			),
+		inserted_alerts AS (	
 			INSERT INTO temperature_alerts (
 				user_id, 
 				city_name, 
@@ -238,13 +239,24 @@ func (r *AlertRepository) QyeryBreaches_view() (*sql.Rows, error) {
 				consecutive_breaches,
 				NOW()
 			FROM new_breaches
-			RETURNING id, user_id, city_name, temperature, threshold, email;
+			RETURNING id, user_id, city_name, temperature, threshold, consecutive_count, alert_timestamp
+		)
+			SELECT 
+				ia.id,
+				ia.user_id,
+				ia.city_name,
+				ia.temperature,
+				ia.threshold,
+				nb.email 
+			FROM inserted_alerts ia
+			JOIN new_breaches nb ON ia.user_id = nb.user_id AND ia.city_name = nb.city_name;	
     
    `)
 
 	if err != nil {
 		return nil, err
 	}
+
 	defer rows.Close()
 
 	return rows, nil
