@@ -3,27 +3,29 @@ import CitySelector from "@/components/City-Selector";
 import DailySummary from "@/components/DailySummary";
 import Tempthreshold from "@/components/Temp-threshold";
 import TemperatureLineChart from "@/components/Temperature-Line-chart";
-import { PositionType } from "@/lib/types";
+import TemperatureUnitSelector from "@/components/TemperatureUnitSelector";
+import { PositionType, Units } from "@/lib/types";
 import React, { useState } from "react";
 
 type Props = {};
 
 const page = (props: Props) => {
   const [position, onPositionChange] = useState<PositionType>("allcities");
+  const [unit, onUnitChange] = useState<Units>("celcius");
   return (
     <main className="max-w-[1450px] mx-auto my-2 flex flex-col justify-center items-center overflow-hidden gap-4">
       <section className="w-full flex justify-between items-center ">
         <div className="w-full flex flex-col justify-start items-start gap-4">
           <h2 className="text-5xl font-bold">Dashboard</h2>
-
         </div>
         <aside className="flex justify-center items-center gap-4">
-           <Tempthreshold/>
+          <TemperatureUnitSelector onUnitChange={onUnitChange} />
+          <Tempthreshold />
           <CitySelector onPositionChange={onPositionChange} />
         </aside>
       </section>
       <section className="w-full max-w-[1400px] mx-auto">
-        <TemperatureLineChart position={position} />
+        <TemperatureLineChart position={position} unit={unit} />
       </section>
       {position != "allcities" ? (
         <section>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { LineChart } from "./Line-chart";
-import { PositionType } from "@/lib/types";
+import { PositionType, Units } from "@/lib/types";
 import apiHandler from "@/handlers/apiHandler";
 import {
   addHours,
@@ -16,6 +16,7 @@ import { Loader2 } from "lucide-react";
 type Props = {
   isSingleCity?: boolean;
   position: PositionType;
+  unit: Units;
 };
 
 interface TemperatureData {
@@ -31,7 +32,31 @@ interface FormattedData {
   [key: string]: number | string;
 }
 
-const processTimeSeriesData = (data: TemperatureData[]) => {
+const getUnitSymbol = (unit: Units): string => {
+  switch (unit) {
+    case "fahrenheit":
+      return "°F";
+    case "kelvin":
+      return "K";
+    case "celsius":
+    default:
+      return "°C";
+  }
+};
+
+const convertTemperature = (celsius: number, targetUnit: Units): number => {
+  switch (targetUnit) {
+    case "fahrenheit":
+      return (celsius * 9) / 5 + 32;
+    case "kelvin":
+      return celsius + 273.15;
+    case "celsius":
+    default:
+      return celsius;
+  }
+};
+
+const processTimeSeriesData = (data: TemperatureData[], unit: Units) => {
   const currentDate = new Date();
   const dayStart = startOfDay(currentDate);
   const dayEnd = endOfDay(currentDate);
@@ -69,7 +94,8 @@ const processTimeSeriesData = (data: TemperatureData[]) => {
             ? curr
             : prev;
         });
-        dataPoint[city] = closestReading.temperature;
+        // Convert temperature to the selected unit
+        dataPoint[city] = convertTemperature(closestReading.temperature, unit);
       }
     });
 
@@ -79,7 +105,11 @@ const processTimeSeriesData = (data: TemperatureData[]) => {
   return formattedData;
 };
 
-const TemperatureLineChart = ({ position, isSingleCity = false }: Props) => {
+const TemperatureLineChart = ({
+  position,
+  isSingleCity = false,
+  unit,
+}: Props) => {
   const [data, setdata] = useState<TemperatureData[]>([]);
   const [isLaoding, setisLaoding] = useState(false);
   const [processedData, setProcessedData] = useState<FormattedData[]>([]);
@@ -102,10 +132,10 @@ const TemperatureLineChart = ({ position, isSingleCity = false }: Props) => {
 
   useEffect(() => {
     if (data && data?.length > 0) {
-      const procData = processTimeSeriesData(data);
+      const procData = processTimeSeriesData(data, unit);
       setProcessedData(procData);
     }
-  }, [data]);
+  }, [data, unit]);
 
   const categories = isSingleCity
     ? ["temperature"]
@@ -125,7 +155,7 @@ const TemperatureLineChart = ({ position, isSingleCity = false }: Props) => {
           showXAxis={true}
           showYAxis={true}
           enableLegendSlider={true}
-          valueFormatter={(value: number) => `${value.toFixed(1)}°C`}
+          valueFormatter={(value: number) => `${value.toFixed(1)}${getUnitSymbol(unit)}`}
           categories={categories}
           tickGap={1}
           xAxisLabel="X-axis"
